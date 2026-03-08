@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 
     private Vector2 _input = Vector2.zero;
     bool isMoving;
+    private RaycastHit2D hit;
 
 
     private void Update()
@@ -27,7 +28,7 @@ public class Player : MonoBehaviour
     private void Move()
     {
 
-
+        //Kiểm tra nếu không di chuyển thì mới cho nhận giá trị để xét input để di chuyển
         if (!isMoving)
         {
             float horizontal = Input.GetAxisRaw("Horizontal");
@@ -35,21 +36,35 @@ public class Player : MonoBehaviour
             isMoving = horizontal != 0 || vertical != 0;
             if (horizontal != 0) vertical = 0;
             _input = new Vector2(horizontal, vertical);
+            
         }
-
+        
+        //Nếu đang di chuyển thì sẽ di chuyển đi khi gặp va chạm rồi mới dừng
         if (isMoving)
         {
+            // lấy vị trí ở phần đầu theo hướng player di chuyển
+            Vector2 origin = (Vector2)transform.position + _input * 0.6f ;
+            //tạo 1 đường thẳng để kiểm tra có sẽ va chạm với gì không, (vị trí, hướng,độ dài)
+            hit = Physics2D.Raycast(origin, _input,0);
+
+            Debug.Log(hit.collider);
+            //di chuyển nhưng vẫn kiểm tra va chạm
             rb.MovePosition(rb.position + 5 * Time.fixedDeltaTime * _input);
             animator.SetFloat(XKey, _input.x);
             animator.SetFloat(YKey, _input.y);
             animator.SetBool(IsMovingKey, isMoving);
         }
 
+
+
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle"))
+        Debug.Log(collision.gameObject);
+        if (hit.collider == null) return;
+        if ((hit.collider.gameObject.CompareTag("Obstacle") && collision.gameObject.CompareTag("Obstacle")) ||
+            (hit.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")))
         {
             if (isMoving)
             {
@@ -62,5 +77,5 @@ public class Player : MonoBehaviour
         }
     }
 
-   
+
 }
