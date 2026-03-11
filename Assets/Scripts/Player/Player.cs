@@ -1,17 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D rb;
-
+    [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private List<ItemSkill> itemSkillList = new();
+   
 
     private const string XKey = "X";
     private const string YKey = "Y";
     private const string IsMovingKey = "IsMoving";
+    //private int status;
+    private int countStatus;
     
 
     private Vector2 _input = Vector2.zero;
@@ -19,12 +26,22 @@ public class Player : MonoBehaviour
     private RaycastHit2D hit;
 
 
+    private void Start()
+    {
+        inventoryManager.SelectSlot(0);
+        //status = 1;
+        countStatus = 1;
+    }
     private void Update()
     {
         Move();
 
     }
 
+    private void ChangeStatus(int index)
+    {
+
+    }
     private void Move()
     {
 
@@ -75,6 +92,26 @@ public class Player : MonoBehaviour
                 animator.SetBool(IsMovingKey, isMoving);
             }
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        var item = collision.GetComponent<ItemSkill>();
+        if (item == null) return;
+        Debug.Log("Nhat");
+        inventoryManager.AddItem(item.Data);
+        itemSkillList.Add(item);
+        countStatus++;
+
+        //TODO: sửa lỗi bị dịch chhuyển đến vị trí vật phẩm
+        isMoving = false;
+        _input = Vector2.zero;
+        animator.SetFloat(XKey, _input.x);
+        animator.SetFloat(YKey, _input.y);
+        animator.SetBool(IsMovingKey, isMoving);
+        transform.position = collision.transform.position;
+        
+        Destroy(collision.gameObject);
     }
 
 
