@@ -12,36 +12,67 @@ public class Player : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private List<ItemSkill> itemSkillList = new();
-   
+
+
+    [Header("Attack")]
+    [SerializeField] private float attackRadius;
+    [SerializeField] private LayerMask enemyLayerMask;
+    [SerializeField] private Transform downAttackPoint;
+    [SerializeField] private Transform leftAttackPoint;
+    [SerializeField] private Transform rightAttackPoint;
+    [SerializeField] private Transform upAttackPoint;
+
 
     private const string XKey = "X";
     private const string YKey = "Y";
     private const string IsMovingKey = "IsMoving";
-    //private int status;
-    private int countStatus;
+
+    
+    
+    
     
 
     private Vector2 _input = Vector2.zero;
-    bool isMoving;
+    private bool isMoving;
     private RaycastHit2D hit;
+
+    private Vector2 targetItemPos;
+    private bool moveToItem = false;
+    private ItemSkill currentItem;
 
 
     private void Start()
     {
         inventoryManager.SelectSlot(0);
-        //status = 1;
-        countStatus = 1;
+      
+        
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(downAttackPoint.position, attackRadius);
+        Gizmos.DrawWireSphere(leftAttackPoint.position, attackRadius);
+        Gizmos.DrawWireSphere(rightAttackPoint.position, attackRadius);
+        Gizmos.DrawWireSphere(upAttackPoint.position, attackRadius);
     }
     private void Update()
     {
-        Move();
+
+        if (moveToItem)
+        {
+
+            Debug.Log("Da nhat");
+            MoveToItem();
+        }
+        else
+        {
+            Move();
+        }
+
 
     }
 
-    private void ChangeStatus(int index)
-    {
-
-    }
+    
     private void Move()
     {
 
@@ -70,9 +101,9 @@ public class Player : MonoBehaviour
             animator.SetFloat(XKey, _input.x);
             animator.SetFloat(YKey, _input.y);
             animator.SetBool(IsMovingKey, isMoving);
+
+           
         }
-
-
 
     }
 
@@ -94,25 +125,95 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void MoveToItem()
     {
-        var item = collision.GetComponent<ItemSkill>();
-        if (item == null) return;
-        Debug.Log("Nhat");
-        inventoryManager.AddItem(item.Data);
-        itemSkillList.Add(item);
-        countStatus++;
-
-        //TODO: sửa lỗi bị dịch chhuyển đến vị trí vật phẩm
-        isMoving = false;
-        _input = Vector2.zero;
-        animator.SetFloat(XKey, _input.x);
-        animator.SetFloat(YKey, _input.y);
-        animator.SetBool(IsMovingKey, isMoving);
-        transform.position = collision.transform.position;
+        rb.MovePosition(Vector2.MoveTowards( rb.position,  targetItemPos,5 * Time.fixedDeltaTime));
         
-        Destroy(collision.gameObject);
+        if (Vector2.Distance(rb.position, targetItemPos) < 0.005f)
+        {
+            inventoryManager.AddItem(currentItem.Data);
+            itemSkillList.Add(currentItem);
+
+            Destroy(currentItem.gameObject);
+
+            moveToItem = false;
+            isMoving = false;
+            _input = Vector2.zero;
+            animator.SetFloat(XKey, _input.x);
+            animator.SetFloat(YKey, _input.y);
+            animator.SetBool(IsMovingKey, isMoving);
+        }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //var item = collision.GetComponent<ItemSkill>();
+        //if (item == null) return;
+        //Debug.Log("Nhat");
+        //inventoryManager.AddItem(item.Data);
+        //itemSkillList.Add(item);
+
+
+
+
+
+
+        //////TODO: sửa lỗi bị dịch chhuyển đến vị trí vật phẩm chứ không phải di chuyển
+
+        //isMoving = false;
+        //_input = Vector2.zero;
+        //animator.SetFloat(XKey, _input.x);
+        //animator.SetFloat(YKey, _input.y);
+        //animator.SetBool(IsMovingKey, isMoving);
+        //transform.position = collision.transform.position;
+
+        //Destroy(collision.gameObject);
+
+
+        var item = collision.GetComponent<ItemSkill>();
+        if (item == null) return;
+        Debug.Log("Nhat item");
+
+        currentItem = item;
+        targetItemPos = collision.transform.position;
+
+        moveToItem = true;
+    }
+
+    //private void Attack()
+    //{
+    //    // Left click
+    //    if (Input.GetMouseButtonDown(0) && !_isAttacking)
+    //    {
+    //        _isAttacking = true;
+    //        animator.SetTrigger(AttackKey);
+
+    //        if (_input.y >= 1f)
+    //        {
+    //            CheckAttack(upAttackPoint);
+    //        }
+    //        else if (_input.y <= -1f)
+    //        {
+    //            CheckAttack(downAttackPoint);
+    //        }
+    //        else if (_input.x >= 1f)
+    //        {
+    //            CheckAttack(rightAttackPoint);
+    //        }
+    //        else if (_input.x <= -1f)
+    //        {
+    //            CheckAttack(leftAttackPoint);
+    //        }
+    //    }
+    //}
+
+    //private void CheckAttack(Transform attackPoint)
+    //{
+    //    //var collider = Physics2D.OverlapCircle(attackPoint.position, attackRadius, enemyLayerMask);
+    //    //if (collider != null && collider.GetComponent<Enemy>() != null)
+    //    //{
+    //    //    collider.GetComponent<Enemy>().OnHit();
+    //    //}
+    //}
 
 }
