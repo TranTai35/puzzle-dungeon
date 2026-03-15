@@ -26,6 +26,8 @@ public class Player : MonoBehaviour
     private const string XKey = "X";
     private const string YKey = "Y";
     private const string IsMovingKey = "IsMoving";
+    private const string IsAttackKey = "Attack";
+    
 
     
     
@@ -40,10 +42,15 @@ public class Player : MonoBehaviour
     private bool moveToItem = false;
     private ItemSkill currentItem;
 
+    private bool isAttacking;
+
+    public bool IsMoving { get { return isMoving; } }
+    public bool IsAttacking { get { return isAttacking; } }
 
     private void Start()
     {
         inventoryManager.SelectSlot(0);
+        inventoryManager.status = 0;
       
         
     }
@@ -58,16 +65,25 @@ public class Player : MonoBehaviour
     private void Update()
     {
 
-        if (moveToItem)
+        if (inventoryManager.status == 0)
         {
+            if (moveToItem)
+            {
+                Debug.Log("Da nhat");
+                MoveToItem();
+            }
+            else
+            {
+                Move();
+            }
+        }else if (inventoryManager.status == 1)
+        {
+            Attack();
+        }
 
-            Debug.Log("Da nhat");
-            MoveToItem();
-        }
-        else
-        {
-            Move();
-        }
+
+       
+
 
 
     }
@@ -84,7 +100,12 @@ public class Player : MonoBehaviour
             isMoving = horizontal != 0 || vertical != 0;
             if (horizontal != 0) vertical = 0;
             _input = new Vector2(horizontal, vertical);
+            if (_input != Vector2.zero)
+            {
+                LevelManager.Instance.UseAction();
+            }
             
+
         }
         
         //Nếu đang di chuyển thì sẽ di chuyển đi khi gặp va chạm rồi mới dừng
@@ -129,7 +150,7 @@ public class Player : MonoBehaviour
     {
         rb.MovePosition(Vector2.MoveTowards( rb.position,  targetItemPos,5 * Time.fixedDeltaTime));
         
-        if (Vector2.Distance(rb.position, targetItemPos) < 0.005f)
+        if (Vector2.Distance(rb.position, targetItemPos) < 0.05f)
         {
             inventoryManager.AddItem(currentItem.Data);
             itemSkillList.Add(currentItem);
@@ -180,40 +201,56 @@ public class Player : MonoBehaviour
         moveToItem = true;
     }
 
-    //private void Attack()
-    //{
-    //    // Left click
-    //    if (Input.GetMouseButtonDown(0) && !_isAttacking)
-    //    {
-    //        _isAttacking = true;
-    //        animator.SetTrigger(AttackKey);
+    private void Attack()
+    {
+        if (isAttacking) return;
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        if (horizontal == 0 && vertical == 0) return;
+        if (horizontal != 0) vertical = 0;
+        _input = new Vector2(horizontal, vertical);
+        isAttacking = true;
+        LevelManager.Instance.UseAction();
 
-    //        if (_input.y >= 1f)
-    //        {
-    //            CheckAttack(upAttackPoint);
-    //        }
-    //        else if (_input.y <= -1f)
-    //        {
-    //            CheckAttack(downAttackPoint);
-    //        }
-    //        else if (_input.x >= 1f)
-    //        {
-    //            CheckAttack(rightAttackPoint);
-    //        }
-    //        else if (_input.x <= -1f)
-    //        {
-    //            CheckAttack(leftAttackPoint);
-    //        }
-    //    }
-    //}
+        animator.SetFloat(XKey, horizontal);
+        animator.SetFloat(YKey, vertical);
+        animator.SetTrigger(IsAttackKey);
 
-    //private void CheckAttack(Transform attackPoint)
-    //{
-    //    //var collider = Physics2D.OverlapCircle(attackPoint.position, attackRadius, enemyLayerMask);
-    //    //if (collider != null && collider.GetComponent<Enemy>() != null)
-    //    //{
-    //    //    collider.GetComponent<Enemy>().OnHit();
-    //    //}
-    //}
+        if (_input.y >= 1f)
+        {
+            CheckAttack(upAttackPoint);
+        }
+        else if (_input.y <= -1f)
+        {
+            CheckAttack(downAttackPoint);
+        }
+        else if (_input.x >= 1f)
+        {
+            CheckAttack(rightAttackPoint);
+        }
+        else if (_input.x <= -1f)
+        {
+            CheckAttack(leftAttackPoint);
+        }
+
+    }
+
+    private void CheckAttack(Transform attackPoint)
+    {
+        var collider = Physics2D.OverlapCircle(attackPoint.position, attackRadius, enemyLayerMask);
+        Debug.Log(collider == null);
+        if (collider != null && collider.GetComponent<Enemy>() != null)
+        {
+            Debug.Log("Danh trung enemy");
+            collider.GetComponent<Enemy>().OnHit();
+        }
+    }
+
+    private void OnCompleteAttack()
+    {
+        Debug.Log("Het tan cong");
+        isAttacking = false;
+        _input = Vector2.zero;
+    }
 
 }

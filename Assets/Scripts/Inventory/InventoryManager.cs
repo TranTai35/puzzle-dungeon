@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    [SerializeField] private Player player;
     [SerializeField] private InventoryItem itemPrefab;
     //[SerializeField] private InventoryData data;
     [SerializeField] private List<InventorySlot> slotList = new List<InventorySlot>();
-    
+    public int status;
 
     private const int MaxSelectSlot = 5;
     private int _selectedSlotIndex;
     private void Update()
     {
+        if (player.IsAttacking || player.IsMoving) return;
         if (Input.inputString != null)
         {
             bool isInputNumber = int.TryParse(Input.inputString, out int number);
@@ -41,6 +43,7 @@ public class InventoryManager : MonoBehaviour
         slotList[_selectedSlotIndex].OnUnselected();
         slotList[index].OnSelected();
         _selectedSlotIndex = index;
+        status = index;
     }
 
     public void AddItem(InventoryItemData item)
