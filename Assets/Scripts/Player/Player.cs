@@ -168,37 +168,32 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //var item = collision.GetComponent<ItemSkill>();
-        //if (item == null) return;
-        //Debug.Log("Nhat");
-        //inventoryManager.AddItem(item.Data);
-        //itemSkillList.Add(item);
-
-
-
-
-
-
-        //////TODO: sửa lỗi bị dịch chhuyển đến vị trí vật phẩm chứ không phải di chuyển
-
-        //isMoving = false;
-        //_input = Vector2.zero;
-        //animator.SetFloat(XKey, _input.x);
-        //animator.SetFloat(YKey, _input.y);
-        //animator.SetBool(IsMovingKey, isMoving);
-        //transform.position = collision.transform.position;
-
-        //Destroy(collision.gameObject);
-
-
+       
         var item = collision.GetComponent<ItemSkill>();
-        if (item == null) return;
-        Debug.Log("Nhat item");
+        if (item != null)
+        {
+            Debug.Log("Nhat item");
 
-        currentItem = item;
-        targetItemPos = collision.transform.position;
+            currentItem = item;
+            targetItemPos = collision.transform.position;
 
-        moveToItem = true;
+            moveToItem = true;
+
+        }
+
+        if (collision.gameObject.CompareTag("Chest"))
+        {
+            isMoving = false;
+            _input = Vector2.zero;
+            animator.SetFloat(XKey, _input.x);
+            animator.SetFloat(YKey, _input.y);
+            animator.SetBool(IsMovingKey, isMoving);
+            LevelManager.Instance.PlayVictory();
+            
+        }
+    
+
+
     }
 
     private void Attack()
@@ -252,5 +247,7 @@ public class Player : MonoBehaviour
         isAttacking = false;
         _input = Vector2.zero;
     }
+
+  
 
 }

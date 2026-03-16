@@ -8,13 +8,18 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private LevelData levelData;
     [SerializeField] private Door door;
+    [SerializeField] private GameObject victory;
 
     private int enemyKilled = 0;
     private int actionUsed = 0;
 
+    private bool IsVictory;
+
     private void Awake()
     {
         Instance = this;
+        IsVictory = false;
+        victory.SetActive(IsVictory);
     }
 
     public void EnemyKilled()
@@ -35,5 +40,11 @@ public class LevelManager : MonoBehaviour
         {
             Debug.Log("Hết lượt hành động");
         }
+    }
+
+    public void PlayVictory()
+    {
+        IsVictory = true;
+        victory.SetActive(IsVictory);
     }
 }
