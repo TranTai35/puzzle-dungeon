@@ -44,6 +44,7 @@ public class InventoryManager : MonoBehaviour
         slotList[index].OnSelected();
         _selectedSlotIndex = index;
         status = index;
+        AudioController.Instance.PlaySoundSelect();
     }
 
     public void AddItem(InventoryItemData item)

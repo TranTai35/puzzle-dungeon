@@ -14,6 +14,9 @@ public class AudioController : MonoBehaviour
 
     [SerializeField] private AudioClip soundMenu;
     [SerializeField] private AudioClip soundGame;
+    [SerializeField] private AudioClip soundHumanWalk;
+    [SerializeField] private AudioClip soundPick;
+    [SerializeField] private AudioClip soundSelect;
 
     private const string SceneMenu = "Menu";
     private const string SceneLevel = "Level";
@@ -64,5 +67,29 @@ public class AudioController : MonoBehaviour
         audioSourceBGM.Play();
     }
 
+    public void PlayHumanWalk()
+    {
+        //if (audioSourceSFM.clip != soundHumanWalk)
+        //{
+        //    audioSourceSFM.clip = soundHumanWalk;
+        //}
 
+        //if (!audioSourceSFM.isPlaying)
+        //{
+        //    audioSourceSFM.Play();
+        //}
+
+
+        audioSourceSFM.PlayOneShot(soundHumanWalk);
+    }
+
+    public void PlayHumanPick()
+    {
+        audioSourceSFM.PlayOneShot(soundPick);
+    }
+   
+    public void PlaySoundSelect()
+    {
+        audioSourceSFM.PlayOneShot(soundSelect);
+    }
 }

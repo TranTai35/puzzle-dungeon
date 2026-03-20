@@ -148,6 +148,7 @@ public class Player : MonoBehaviour
 
     private void MoveToItem()
     {
+        AudioController.Instance.PlayHumanPick();
         rb.MovePosition(Vector2.MoveTowards( rb.position,  targetItemPos,5 * Time.fixedDeltaTime));
         
         if (Vector2.Distance(rb.position, targetItemPos) < 0.05f)
@@ -248,6 +249,11 @@ public class Player : MonoBehaviour
         _input = Vector2.zero;
     }
 
-  
+    private void PlayWalk()
+    {
+        AudioController.Instance.PlayHumanWalk();
+    }
+ 
+
 
 }
