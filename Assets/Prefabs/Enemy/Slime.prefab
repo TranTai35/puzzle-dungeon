@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2002703392523450858}
   - component: {fileID: 4969610247034013256}
   - component: {fileID: 4995316021511833373}
+  - component: {fileID: 26293114856939366}
   m_Layer: 7
   m_Name: Slime
   m_TagString: Obstacle
@@ -152,3 +153,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1111681, y: 1.0411556}
   m_EdgeRadius: 0
+--- !u!114 &26293114856939366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8301264065451336471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34db76b62d4bada4ebf2fed6ffc3628d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 4969610247034013256}

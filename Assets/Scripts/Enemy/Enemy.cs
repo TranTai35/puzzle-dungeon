@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Animator animator;
     public void OnHit()
     {
+        AudioController.Instance.PlayHitDame();
         animator.SetTrigger(DieKey);
       
     }

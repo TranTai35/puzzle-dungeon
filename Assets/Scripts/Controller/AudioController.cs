@@ -17,6 +17,11 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip soundHumanWalk;
     [SerializeField] private AudioClip soundPick;
     [SerializeField] private AudioClip soundSelect;
+    [SerializeField] private AudioClip soundAttack;
+    [SerializeField] private AudioClip soundHitDame;
+    [SerializeField] private AudioClip soundDoor;
+    [SerializeField] private AudioClip soundWin;
+
 
     private const string SceneMenu = "Menu";
     private const string SceneLevel = "Level";
@@ -91,5 +96,24 @@ public class AudioController : MonoBehaviour
     public void PlaySoundSelect()
     {
         audioSourceSFM.PlayOneShot(soundSelect);
+    }
+
+    public void PlaySoundAttack()
+    {
+        audioSourceSFM.PlayOneShot(soundAttack);
+    }
+
+    public void PlayHitDame()
+    {
+        audioSourceSFM.PlayOneShot(soundHitDame);
+    }
+
+    public void PlaySoundDoor()
+    {
+        audioSourceSFM.PlayOneShot(soundDoor);
+    }
+    public void PlaySoundWin()
+    {
+        audioSourceSFM.PlayOneShot(soundWin);
     }
 }

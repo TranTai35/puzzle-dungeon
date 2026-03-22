@@ -189,7 +189,9 @@ public class Player : MonoBehaviour
             animator.SetFloat(XKey, _input.x);
             animator.SetFloat(YKey, _input.y);
             animator.SetBool(IsMovingKey, isMoving);
+            AudioController.Instance.PlaySoundWin();
             LevelManager.Instance.PlayVictory();
+            
             
         }
     
@@ -211,6 +213,7 @@ public class Player : MonoBehaviour
         animator.SetFloat(XKey, horizontal);
         animator.SetFloat(YKey, vertical);
         animator.SetTrigger(IsAttackKey);
+        AudioController.Instance.PlaySoundAttack();
 
         if (_input.y >= 1f)
         {

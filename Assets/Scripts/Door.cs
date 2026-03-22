@@ -6,13 +6,12 @@ public class Door : MonoBehaviour
 {
     [SerializeField] private ParticleSystem openEffect;
 
-    private bool isOpen = false;
+ 
 
     public void OpenDoor()
     {
-        if (isOpen) return;
 
-        isOpen = true;
+        AudioController.Instance.PlaySoundDoor();
 
         StartCoroutine(OpenDoorAnimation());
     }
