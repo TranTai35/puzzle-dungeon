@@ -919,7 +919,8 @@ MonoBehaviour:
   soundAttack: {fileID: 8300000, guid: 6882a43a243e2b34b8cd61f777a5282f, type: 3}
   soundHitDame: {fileID: 8300000, guid: fec4448078fb49941bc39b59f7efc7a6, type: 3}
   soundDoor: {fileID: 8300000, guid: 3227f9400796efd41a500c98150ec4d3, type: 3}
-  soundWin: {fileID: 8300000, guid: bd717fb4f9dbef74c8e1911c93358f71, type: 3}
+  soundWin: {fileID: 8300000, guid: c4ea29cd7c3b03647ace95224f21936d, type: 3}
+  soundLose: {fileID: 8300000, guid: 5633958519ec6a4489a496a96eb26199, type: 3}
 --- !u!1 &506112034
 GameObject:
   m_ObjectHideFlags: 0

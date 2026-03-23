@@ -21,6 +21,7 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip soundHitDame;
     [SerializeField] private AudioClip soundDoor;
     [SerializeField] private AudioClip soundWin;
+    [SerializeField] private AudioClip soundLose;
 
 
     private const string SceneMenu = "Menu";
@@ -115,5 +116,10 @@ public class AudioController : MonoBehaviour
     public void PlaySoundWin()
     {
         audioSourceSFM.PlayOneShot(soundWin);
+    }
+
+    public void PlaySoundLose()
+    {
+        audioSourceSFM.PlayOneShot(soundLose);
     }
 }

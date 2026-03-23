@@ -266,6 +266,7 @@ public class Player : MonoBehaviour
         LevelManager.Instance.PlayDefeat();
         if (LevelManager.Instance.IsDefeat == true)
         {
+            AudioController.Instance.PlaySoundLose();
             isMoving = false;
             _input = Vector2.zero;
             animator.SetFloat(XKey, _input.x);
