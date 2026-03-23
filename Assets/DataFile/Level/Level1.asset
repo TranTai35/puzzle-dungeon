@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Level1
   m_EditorClassIdentifier: 
   enemyCount: 3
-  actionLimit: 7
+  actionLimit: 13

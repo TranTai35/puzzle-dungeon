@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     private const string IsMovingKey = "IsMoving";
     private const string IsAttackKey = "Attack";
     
-
+    
     
     
     
@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
     private ItemSkill currentItem;
 
     private bool isAttacking;
+    private bool canPlay = true;
 
     public bool IsMoving { get { return isMoving; } }
     public bool IsAttacking { get { return isAttacking; } }
@@ -65,6 +66,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
 
+        if (!canPlay) return;
         if (inventoryManager.status == 0)
         {
             if (moveToItem)
@@ -82,7 +84,7 @@ public class Player : MonoBehaviour
         }
 
 
-       
+        checkDefeat();
 
 
 
@@ -148,6 +150,7 @@ public class Player : MonoBehaviour
 
     private void MoveToItem()
     {
+        
         AudioController.Instance.PlayHumanPick();
         rb.MovePosition(Vector2.MoveTowards( rb.position,  targetItemPos,5 * Time.fixedDeltaTime));
         
@@ -191,6 +194,7 @@ public class Player : MonoBehaviour
             animator.SetBool(IsMovingKey, isMoving);
             AudioController.Instance.PlaySoundWin();
             LevelManager.Instance.PlayVictory();
+            canPlay = false;
             
             
         }
@@ -256,7 +260,20 @@ public class Player : MonoBehaviour
     {
         AudioController.Instance.PlayHumanWalk();
     }
- 
 
+    private void checkDefeat()
+    {
+        LevelManager.Instance.PlayDefeat();
+        if (LevelManager.Instance.IsDefeat == true)
+        {
+            isMoving = false;
+            _input = Vector2.zero;
+            animator.SetFloat(XKey, _input.x);
+            animator.SetFloat(YKey, _input.y);
+            animator.SetBool(IsMovingKey, isMoving);
+            canPlay = false;
+        }
+
+    }
 
 }
