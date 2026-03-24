@@ -10,9 +10,9 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private InventoryManager inventoryManager;
+    //[SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private List<ItemSkill> itemSkillList = new();
-
+    [SerializeField] private ItemSkill itemBoots;
 
     [Header("Attack")]
     [SerializeField] private float attackRadius;
@@ -50,9 +50,9 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        inventoryManager.SelectSlot(0);
-        inventoryManager.status = 0;
-      
+        InventoryManager.Instance.AddItem(itemBoots.Data);
+        itemSkillList.Add(itemBoots);
+        InventoryManager.Instance.SelectSlot(0);
         
     }
 
@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
     {
 
         if (!canPlay) return;
-        if (inventoryManager.status == 0)
+        if (InventoryManager.Instance.status == "Boots")
         {
             if (moveToItem)
             {
@@ -78,7 +78,7 @@ public class Player : MonoBehaviour
             {
                 Move();
             }
-        }else if (inventoryManager.status == 1)
+        }else if (InventoryManager.Instance.status == "Sword")
         {
             Attack();
         }
@@ -156,7 +156,7 @@ public class Player : MonoBehaviour
         
         if (Vector2.Distance(rb.position, targetItemPos) < 0.05f)
         {
-            inventoryManager.AddItem(currentItem.Data);
+            InventoryManager.Instance.AddItem(currentItem.Data);
             itemSkillList.Add(currentItem);
 
             Destroy(currentItem.gameObject);

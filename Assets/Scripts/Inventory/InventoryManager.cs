@@ -4,14 +4,22 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    public static InventoryManager Instance;
     [SerializeField] private Player player;
     [SerializeField] private InventoryItem itemPrefab;
-    //[SerializeField] private InventoryData data;
     [SerializeField] private List<InventorySlot> slotList = new List<InventorySlot>();
-    public int status;
+    public string status;
 
     private const int MaxSelectSlot = 5;
     private int _selectedSlotIndex;
+    
+    private void Awake()
+    {
+        if (Instance == null || Instance != this)
+        {
+            Instance = this;
+        }
+    }
     private void Update()
     {
         if (player.IsAttacking || player.IsMoving) return;
@@ -33,17 +41,21 @@ public class InventoryManager : MonoBehaviour
         {
             return;
         }
-
+        
         var item = slotList[index].GetComponentInChildren<InventoryItem>();
+        Debug.Log(item != null);
         if (item == null)
         {
             Debug.Log("Khong the chon");
             return;
         }
+       
         slotList[_selectedSlotIndex].OnUnselected();
         slotList[index].OnSelected();
         _selectedSlotIndex = index;
-        status = index;
+        //status = index;
+        //Debug.Log(item.Data.Name);
+        status = item.Data.Name;
         AudioController.Instance.PlaySoundSelect();
     }
 

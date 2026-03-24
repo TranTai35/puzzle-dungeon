@@ -230,9 +230,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 6242347235129253619}
   rb: {fileID: 14250920544044304}
-  inventoryManager: {fileID: 0}
-  itemSkillList:
-  - {fileID: 6529384259994626447, guid: a38dbc1dd4095144db7ec4818f5ae903, type: 3}
+  itemSkillList: []
+  itemBoots: {fileID: 6529384259994626447, guid: a38dbc1dd4095144db7ec4818f5ae903, type: 3}
   attackRadius: 0.25
   enemyLayerMask:
     serializedVersion: 2

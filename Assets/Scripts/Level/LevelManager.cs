@@ -45,7 +45,7 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        textActionLimit.text = $"{actionUsed}/{levelData.actionLimit}";
+        textActionLimit.text = $"Action: {actionUsed}/{levelData.actionLimit}";
     }
 
 
