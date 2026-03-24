@@ -81,6 +81,9 @@ public class LevelManager : MonoBehaviour
         {
             IsDefeat = true;
             defeat.SetActive(IsDefeat);
+        } else if (IsDefeat == true)
+        {
+            defeat.SetActive(IsDefeat);
         }
     }
 }

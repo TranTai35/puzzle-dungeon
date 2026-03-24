@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     private const string YKey = "Y";
     private const string IsMovingKey = "IsMoving";
     private const string IsAttackKey = "Attack";
+    private const string IsDieKey = "Die";
     
     
     
@@ -146,6 +147,26 @@ public class Player : MonoBehaviour
                 animator.SetBool(IsMovingKey, isMoving);
             }
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (hit.collider == null) return;
+        if (hit.collider.gameObject.CompareTag("Peak") && collision.gameObject.CompareTag("Peak"))
+        {
+
+           
+            AudioController.Instance.PlaySoundLose();
+            LevelManager.Instance.IsDefeat = true;
+            LevelManager.Instance.PlayDefeat();
+            animator.SetTrigger(IsDieKey);
+
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(gameObject);
     }
 
     private void MoveToItem()

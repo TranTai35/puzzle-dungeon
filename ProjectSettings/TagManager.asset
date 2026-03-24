@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - ItemSkill
   - Chest
+  - Peak
   layers:
   - Default
   - TransparentFX
