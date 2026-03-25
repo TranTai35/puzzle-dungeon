@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InventoryItem : MonoBehaviour
 {
     [SerializeField] private Image image;
+    //[SerializeField] private AspectRatioFitter aspectRatioFitter;
 
     
     public InventoryItemData Data { get; set; }
@@ -17,6 +18,9 @@ public class InventoryItem : MonoBehaviour
 
         image.sprite = data.sprite;
         Data = data;
+       // aspectRatioFitter.aspectRatio = Data.Ratio;
     }
+
+
     
 }

@@ -82,10 +82,13 @@ public class Player : MonoBehaviour
         }else if (InventoryManager.Instance.status == "Sword")
         {
             Attack();
+        }else if (InventoryManager.Instance.status == "Arrow")
+        {
+            Shot();
         }
 
 
-        checkDefeat();
+            checkDefeat();
 
 
 
@@ -171,14 +174,18 @@ public class Player : MonoBehaviour
 
     private void MoveToItem()
     {
-        
+        Debug.Log("Se nhac");
+        Debug.Log(targetItemPos);
         AudioController.Instance.PlayHumanPick();
         rb.MovePosition(Vector2.MoveTowards( rb.position,  targetItemPos,5 * Time.fixedDeltaTime));
         
-        if (Vector2.Distance(rb.position, targetItemPos) < 0.05f)
+        if (Vector2.Distance(rb.position, targetItemPos) < 0.1f)
         {
+            Debug.Log("Se nhat");
             InventoryManager.Instance.AddItem(currentItem.Data);
-            itemSkillList.Add(currentItem);
+            ItemSkill newItem = new();
+            newItem = currentItem;
+            itemSkillList.Add(newItem);
 
             Destroy(currentItem.gameObject);
 
@@ -268,6 +275,48 @@ public class Player : MonoBehaviour
             Debug.Log("Danh trung enemy");
             collider.GetComponent<Enemy>().OnHit();
         }
+    }
+
+    private void Shot()
+    {
+        ItemSkill clone = null;
+        for(int i = 0; i < itemSkillList.Count; i++)
+        {
+            if (itemSkillList[i].Data.name == "Arrow")
+            {
+                clone = itemSkillList[i];
+            }
+
+        }
+        Debug.Log("cos tao arrow");
+        if (clone == null) return;
+        Debug.Log("cos tao arrow");
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        if (horizontal == 0 && vertical == 0) return;
+        if (horizontal != 0) vertical = 0;
+        _input = new Vector2(horizontal, vertical);
+        if (_input.y >= 1f)
+        {
+            Shot(clone, upAttackPoint);
+        }
+        else if (_input.y <= -1f)
+        {
+            Shot(clone, downAttackPoint);
+        }
+        else if (_input.x >= 1f)
+        {
+            Shot(clone, rightAttackPoint);
+        }
+        else if (_input.x <= -1f)
+        {
+            Shot(clone, leftAttackPoint);
+        }
+    }
+
+    private void Shot(ItemSkill item,Transform attackPoint)
+    {
+        var clone = Instantiate(item, attackPoint.position, attackPoint.rotation);
     }
 
     private void OnCompleteAttack()

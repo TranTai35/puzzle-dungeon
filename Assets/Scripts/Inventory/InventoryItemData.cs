@@ -8,4 +8,8 @@ public class InventoryItemData : ScriptableObject
     [field: SerializeField] public string Name {  get; private set; }
     [field: SerializeField] public Sprite sprite { get; private set; }
 
+    //[field: SerializeField] public float Ratio { get; private set; }
+
+
+
 }
