@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,8 +12,10 @@ public class Player : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D rb;
     //[SerializeField] private InventoryManager inventoryManager;
-    [SerializeField] private List<ItemSkill> itemSkillList = new();
+    //[SerializeField] private List<ItemSkill> itemSkillList = new();
     [SerializeField] private ItemSkill itemBoots;
+    [SerializeField] private Projectile arrow;
+    
 
     [Header("Attack")]
     [SerializeField] private float attackRadius;
@@ -42,17 +45,21 @@ public class Player : MonoBehaviour
     private Vector2 targetItemPos;
     private bool moveToItem = false;
     private ItemSkill currentItem;
+    private Projectile currentProjectile;     
 
     private bool isAttacking;
     private bool canPlay = true;
+    public bool canShot = false;
 
     public bool IsMoving { get { return isMoving; } }
     public bool IsAttacking { get { return isAttacking; } }
 
+
+
     private void Start()
     {
         InventoryManager.Instance.AddItem(itemBoots.Data);
-        itemSkillList.Add(itemBoots);
+        //itemSkillList.Add(itemBoots);
         InventoryManager.Instance.SelectSlot(0);
         
     }
@@ -68,7 +75,7 @@ public class Player : MonoBehaviour
     {
 
         if (!canPlay) return;
-        if (InventoryManager.Instance.status == "Boots")
+        if (InventoryManager.Instance.itemSelecting.Name == "Boots")
         {
             if (moveToItem)
             {
@@ -79,10 +86,10 @@ public class Player : MonoBehaviour
             {
                 Move();
             }
-        }else if (InventoryManager.Instance.status == "Sword")
+        }else if (InventoryManager.Instance.itemSelecting.Name == "Sword")
         {
             Attack();
-        }else if (InventoryManager.Instance.status == "Arrow")
+        }else if (InventoryManager.Instance.itemSelecting.Name == "Bow")
         {
             Shot();
         }
@@ -122,7 +129,8 @@ public class Player : MonoBehaviour
             //tạo 1 đường thẳng để kiểm tra có sẽ va chạm với gì không, (vị trí, hướng,độ dài)
             hit = Physics2D.Raycast(origin, _input,0);
 
-            Debug.Log(hit.collider);
+            Debug.Log(gameObject);
+            Debug.Log(gameObject,hit.collider);
             //di chuyển nhưng vẫn kiểm tra va chạm
             rb.MovePosition(rb.position + 5 * Time.fixedDeltaTime * _input);
             animator.SetFloat(XKey, _input.x);
@@ -138,7 +146,7 @@ public class Player : MonoBehaviour
     {
         Debug.Log(collision.gameObject);
         if (hit.collider == null) return;
-        if ((hit.collider.gameObject.CompareTag("Obstacle") && collision.gameObject.CompareTag("Obstacle")) ||
+        if ((hit.collider.gameObject.CompareTag("Enemy") && collision.gameObject.CompareTag("Enemy")) ||
             (hit.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")))
         {
             if (isMoving)
@@ -182,12 +190,18 @@ public class Player : MonoBehaviour
         if (Vector2.Distance(rb.position, targetItemPos) < 0.1f)
         {
             Debug.Log("Se nhat");
-            InventoryManager.Instance.AddItem(currentItem.Data);
-            ItemSkill newItem = new();
-            newItem = currentItem;
-            itemSkillList.Add(newItem);
-
-            Destroy(currentItem.gameObject);
+            if (currentItem != null)
+            {
+                InventoryManager.Instance.AddItem(currentItem.Data);
+                Destroy(currentItem.gameObject);
+                currentItem = null;
+            }
+            if (currentProjectile != null)
+            {
+                canShot = true;
+                Destroy(currentProjectile.gameObject);
+                currentProjectile = null; 
+            }
 
             moveToItem = false;
             isMoving = false;
@@ -225,6 +239,16 @@ public class Player : MonoBehaviour
             canPlay = false;
             
             
+        }
+        Debug.Log("Nhat projectile");
+        if (collision.gameObject.CompareTag("Projectile"))
+        {
+            Debug.Log("Nhat projectile");
+
+            currentProjectile = collision.GetComponent<Projectile>();
+            targetItemPos = collision.transform.position;
+
+            moveToItem = true;
         }
     
 
@@ -279,18 +303,7 @@ public class Player : MonoBehaviour
 
     private void Shot()
     {
-        ItemSkill clone = null;
-        for(int i = 0; i < itemSkillList.Count; i++)
-        {
-            if (itemSkillList[i].Data.name == "Arrow")
-            {
-                clone = itemSkillList[i];
-            }
-
-        }
-        Debug.Log("cos tao arrow");
-        if (clone == null) return;
-        Debug.Log("cos tao arrow");
+        if (canShot == false) return;
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         if (horizontal == 0 && vertical == 0) return;
@@ -298,25 +311,28 @@ public class Player : MonoBehaviour
         _input = new Vector2(horizontal, vertical);
         if (_input.y >= 1f)
         {
-            Shot(clone, upAttackPoint);
+            ShotArrow(upAttackPoint);
         }
         else if (_input.y <= -1f)
         {
-            Shot(clone, downAttackPoint);
+            ShotArrow(downAttackPoint);
         }
         else if (_input.x >= 1f)
         {
-            Shot(clone, rightAttackPoint);
+            ShotArrow(rightAttackPoint);
         }
         else if (_input.x <= -1f)
         {
-            Shot(clone, leftAttackPoint);
+            ShotArrow(leftAttackPoint);
         }
+        LevelManager.Instance.UseAction();
+        canShot = false;
     }
 
-    private void Shot(ItemSkill item,Transform attackPoint)
+    private void ShotArrow(Transform attackPoint)
     {
-        var clone = Instantiate(item, attackPoint.position, attackPoint.rotation);
+        var clone = Instantiate(arrow, attackPoint.position, attackPoint.rotation);
+        clone.Init(_input);
     }
 
     private void OnCompleteAttack()

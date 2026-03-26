@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Animator animator;
     public void OnHit()
     {
-        AudioController.Instance.PlayHitDame();
+        
         animator.SetTrigger(DieKey);
       
     }
@@ -16,6 +16,11 @@ public class Enemy : MonoBehaviour
     {
         LevelManager.Instance.EnemyKilled();
         Destroy(gameObject);
+    }
+
+    public void PlayHitDame()
+    {
+        AudioController.Instance.PlayHitDame();
     }
 
 }

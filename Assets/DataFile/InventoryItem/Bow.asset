@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33d0743b8a45e8742bb32a5c6996f32a, type: 3}
-  m_Name: Arrow
+  m_Name: Bow
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Arrow
-  <sprite>k__BackingField: {fileID: -1431934609, guid: 38aeccbf345767448996c4775ab9f40b, type: 3}
+  <Name>k__BackingField: Bow
+  <sprite>k__BackingField: {fileID: -1745296948, guid: 73be61d7597319b47a226fad999666f1, type: 3}

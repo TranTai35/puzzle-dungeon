@@ -8,7 +8,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private InventoryItem itemPrefab;
     [SerializeField] private List<InventorySlot> slotList = new List<InventorySlot>();
-    public string status;
+    //public string status;
+    public InventoryItemData itemSelecting;
 
     private const int MaxSelectSlot = 5;
     private int _selectedSlotIndex;
@@ -55,7 +56,8 @@ public class InventoryManager : MonoBehaviour
         _selectedSlotIndex = index;
         //status = index;
         //Debug.Log(item.Data.Name);
-        status = item.Data.Name;
+        itemSelecting = item.Data;
+        //status = item.Data.Name;
         AudioController.Instance.PlaySoundSelect();
     }
 
@@ -74,6 +76,10 @@ public class InventoryManager : MonoBehaviour
 
     private void SpawnItem(InventoryItemData itemData, InventorySlot slot)
     {
+        if (itemData.Name == "Bow")
+        {
+            player.canShot = true;
+        }
         var item = Instantiate(itemPrefab, slot.transform);
         item.Init(itemData);
     }
