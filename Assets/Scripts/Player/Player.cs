@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
 
     private Vector2 targetItemPos;
     private bool moveToItem = false;
+    private bool moveToProjectile = false;
     private ItemSkill currentItem;
     private Projectile currentProjectile;     
 
@@ -77,7 +78,7 @@ public class Player : MonoBehaviour
         if (!canPlay) return;
         if (InventoryManager.Instance.itemSelecting.Name == "Boots")
         {
-            if (moveToItem)
+            if (moveToItem || moveToProjectile)
             {
                 Debug.Log("Da nhat");
                 MoveToItem();
@@ -144,7 +145,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject);
+        //Debug.Log(collision.gameObject);
         if (hit.collider == null) return;
         if ((hit.collider.gameObject.CompareTag("Enemy") && collision.gameObject.CompareTag("Enemy")) ||
             (hit.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")))
@@ -195,15 +196,17 @@ public class Player : MonoBehaviour
                 InventoryManager.Instance.AddItem(currentItem.Data);
                 Destroy(currentItem.gameObject);
                 currentItem = null;
+                moveToItem = false;
             }
             if (currentProjectile != null)
             {
                 canShot = true;
                 Destroy(currentProjectile.gameObject);
-                currentProjectile = null; 
+                currentProjectile = null;
+                moveToProjectile = false;
             }
 
-            moveToItem = false;
+            
             isMoving = false;
             _input = Vector2.zero;
             animator.SetFloat(XKey, _input.x);
@@ -212,7 +215,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
        
         var item = collision.GetComponent<ItemSkill>();
@@ -247,8 +250,11 @@ public class Player : MonoBehaviour
 
             currentProjectile = collision.GetComponent<Projectile>();
             targetItemPos = collision.transform.position;
-
-            moveToItem = true;
+            if (isMoving)
+            {
+                moveToProjectile = true;
+            }
+            
         }
     
 

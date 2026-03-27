@@ -230,8 +230,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 6242347235129253619}
   rb: {fileID: 14250920544044304}
-  itemSkillList: []
   itemBoots: {fileID: 6529384259994626447, guid: a38dbc1dd4095144db7ec4818f5ae903, type: 3}
+  arrow: {fileID: 9009431493044672133, guid: 38e282fc88adcd141aaece45e8aa7577, type: 3}
   attackRadius: 0.25
   enemyLayerMask:
     serializedVersion: 2
@@ -240,6 +240,7 @@ MonoBehaviour:
   leftAttackPoint: {fileID: 1290163610228666099}
   rightAttackPoint: {fileID: 3621015023040330359}
   upAttackPoint: {fileID: 1914329996199729168}
+  canShot: 0
 --- !u!95 &6242347235129253619
 Animator:
   serializedVersion: 5

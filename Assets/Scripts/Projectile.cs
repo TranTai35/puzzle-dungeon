@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
     private Vector2 _input = Vector2.zero;
 
     private Enemy currentEnemy;
-    private Vector2 target;
+    private Transform target;
     private bool moveToEnemy = false;
 
     public void Init(Vector2 input)
@@ -62,9 +62,9 @@ public class Projectile : MonoBehaviour
     private void MoveToEnemy()
     {
       
-        rb.MovePosition(Vector2.MoveTowards(rb.position, target, 5 * Time.fixedDeltaTime));
+        rb.MovePosition(Vector2.MoveTowards(rb.position, target.position, 5 * Time.fixedDeltaTime));
 
-        if (Vector2.Distance(rb.position, target) < 0.1f)
+        if (Vector2.Distance(rb.position, target.position) < 0.1f)
         {
         
         
@@ -79,27 +79,89 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        //Debug.LogError($"Trigger: {collision?.gameObject.name}");
+
         if (hitArrow.collider == null) return;
-        if (hitArrow.collider.gameObject.CompareTag("Peak") && collision.gameObject.CompareTag("Peak"))
+        if ((hitArrow.collider.gameObject.CompareTag("Peak") && collision.gameObject.CompareTag("Peak")) ||
+            (hitArrow.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")))
         {
             _input = Vector2.zero;
             rb.isKinematic = true;
-            
-            colliders.isTrigger = true;
-        }
-        colliders.isTrigger = true;
 
+            if (target == null)
+            {
+                target = collision.transform;
+            }
+        }
+
+        //if (collision.gameObject.CompareTag("Enemy"))
+        //{
+        //    currentEnemy = collision.transform.GetComponent<Enemy>();
+        //    if (currentEnemy == null)
+        //    {
+        //        Debug.LogError("1");
+
+        //        return;
+        //    }
+
+        //    if (target == null)
+        //    {
+        //        target = collision.transform;
+        //    }
+        //    moveToEnemy = true;
+        //}
     }
+
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    Debug.LogError($"Trigger: {collision?.gameObject.name}");
+
+    //    if (hitArrow.collider == null) return;
+    //    if (hitArrow.collider.gameObject.CompareTag("Peak") && collision.gameObject.CompareTag("Peak"))
+    //    {
+    //        _input = Vector2.zero;
+    //        rb.isKinematic = true;
+    //        target = collision.transform.position;
+    //        colliders.isTrigger = true;
+    //    }
+
+    //    if (collision.gameObject.CompareTag("Enemy"))
+    //    {
+    //        currentEnemy = collision.transform.GetComponent<Enemy>();
+    //        if (currentEnemy == null)
+    //        {
+    //            Debug.LogError("1");
+
+    //            return;
+    //        }
+    //        target = collision.transform.position;
+    //        moveToEnemy = true;
+    //    }
+
+    //    //colliders.isTrigger = true;
+
+    //}
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        currentEnemy = collision.GetComponent<Enemy>();
-        if (currentEnemy == null) return;
-        target = collision.transform.position;
-        moveToEnemy = true;
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            currentEnemy = collision.transform.GetComponent<Enemy>();
+            if (currentEnemy == null)
+            {
+                Debug.LogError("1");
+
+                return;
+            }
+
+            if (target == null)
+            {
+                target = collision.transform;
+            }
+            moveToEnemy = true;
+        }
     }
 
 }
