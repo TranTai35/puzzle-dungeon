@@ -52,6 +52,8 @@ public class Player : MonoBehaviour
     private bool canPlay = true;
     public bool canShot = false;
 
+    
+
     public bool IsMoving { get { return isMoving; } }
     public bool IsAttacking { get { return isAttacking; } }
 
@@ -72,6 +74,8 @@ public class Player : MonoBehaviour
         Gizmos.DrawWireSphere(rightAttackPoint.position, attackRadius);
         Gizmos.DrawWireSphere(upAttackPoint.position, attackRadius);
     }
+
+    public void SetCanPlay(bool Play) => canPlay = Play;
     private void Update()
     {
 
