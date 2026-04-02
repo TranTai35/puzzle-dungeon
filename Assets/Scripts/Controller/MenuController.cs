@@ -10,13 +10,13 @@ public class MenuController : MonoBehaviour
     //[SerializeField] private List<Button> listButton = new();
 
 
-    //private void Awake()
-    //{
+    private void Awake()
+    {
 
-    //    InitButton();
-    //    menuSetting.SetActive(false);
+        //InitButton();
+        menuSetting.SetActive(false);
 
-    //}
+    }
 
     //private void InitButton()
     //{

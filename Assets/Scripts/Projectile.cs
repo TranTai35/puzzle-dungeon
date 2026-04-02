@@ -85,15 +85,16 @@ public class Projectile : MonoBehaviour
 
         if (hitArrow.collider == null) return;
         if ((hitArrow.collider.gameObject.CompareTag("Peak") && collision.gameObject.CompareTag("Peak")) ||
-            (hitArrow.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")))
+            (hitArrow.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")) ||
+            (hitArrow.collider.gameObject.CompareTag("Obstacle") && collision.gameObject.CompareTag("Obstacle"))) 
         {
             _input = Vector2.zero;
             rb.isKinematic = true;
 
-            if (target == null)
-            {
-                target = collision.transform;
-            }
+            //if (target == null)
+            //{
+            //    target = collision.transform;
+            //}
         }
 
         //if (collision.gameObject.CompareTag("Enemy"))
