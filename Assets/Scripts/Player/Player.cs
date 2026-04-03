@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
     private bool isAttacking;
     private bool canPlay = true;
     public bool canShot = false;
+    
 
     
 
@@ -84,7 +85,7 @@ public class Player : MonoBehaviour
         {
             if (moveToItem || moveToProjectile)
             {
-                Debug.Log("Da nhat");
+                
                 MoveToItem();
             }
             else
@@ -113,11 +114,12 @@ public class Player : MonoBehaviour
         //Kiểm tra nếu không di chuyển thì mới cho nhận giá trị để xét input để di chuyển
         if (!isMoving)
         {
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
-            isMoving = horizontal != 0 || vertical != 0;
-            if (horizontal != 0) vertical = 0;
-            _input = new Vector2(horizontal, vertical);
+            //float horizontal = Input.GetAxisRaw("Horizontal");
+            //float vertical = Input.GetAxisRaw("Vertical");
+            //if (horizontal != 0) vertical = 0;
+            //_input = new Vector2(horizontal, vertical);
+            checkCanAction();
+            isMoving = _input.x != 0 || _input.y != 0;
             if (_input != Vector2.zero)
             {
                 LevelManager.Instance.UseAction();
@@ -149,7 +151,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        //Debug.Log(collision.gameObject);
+        
         if (hit.collider == null) return;
         if ((hit.collider.gameObject.CompareTag("Enemy") && collision.gameObject.CompareTag("Enemy")) ||
             (hit.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")))
@@ -187,14 +189,13 @@ public class Player : MonoBehaviour
 
     private void MoveToItem()
     {
-        Debug.Log("Se nhac");
-        Debug.Log(targetItemPos);
+       
         AudioController.Instance.PlayHumanPick();
         rb.MovePosition(Vector2.MoveTowards( rb.position,  targetItemPos,5 * Time.fixedDeltaTime));
         
-        if (Vector2.Distance(rb.position, targetItemPos) < 0.1f)
+        if (Vector2.Distance(rb.position, targetItemPos) < 0.2f)
         {
-            Debug.Log("Se nhat");
+           
             if (currentItem != null)
             {
                 InventoryManager.Instance.AddItem(currentItem.Data);
@@ -219,18 +220,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
        
         var item = collision.GetComponent<ItemSkill>();
         if (item != null)
         {
-            Debug.Log("Nhat item");
+            
 
             currentItem = item;
             targetItemPos = collision.transform.position;
 
             moveToItem = true;
+            return;
 
         }
 
@@ -241,43 +243,49 @@ public class Player : MonoBehaviour
             animator.SetFloat(XKey, _input.x);
             animator.SetFloat(YKey, _input.y);
             animator.SetBool(IsMovingKey, isMoving);
-            AudioController.Instance.PlaySoundWin();
             LevelManager.Instance.PlayVictory();
             canPlay = false;
             
             
         }
-        Debug.Log("Nhat projectile");
+        
+       
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
         if (collision.gameObject.CompareTag("Projectile"))
         {
-            Debug.Log("Nhat projectile");
+
+
 
             currentProjectile = collision.GetComponent<Projectile>();
             targetItemPos = collision.transform.position;
             if (isMoving)
             {
+
                 moveToProjectile = true;
             }
-            
+
         }
-    
-
-
     }
 
     private void Attack()
     {
         if (isAttacking) return;
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        if (horizontal == 0 && vertical == 0) return;
-        if (horizontal != 0) vertical = 0;
-        _input = new Vector2(horizontal, vertical);
+        //float horizontal = Input.GetAxisRaw("Horizontal");
+        //float vertical = Input.GetAxisRaw("Vertical");
+        //if (horizontal != 0) vertical = 0;
+        //_input = new Vector2(horizontal, vertical);
+        checkCanAction();
+
+        if (_input.x == 0 && _input.y == 0) return;
+
         isAttacking = true;
         LevelManager.Instance.UseAction();
 
-        animator.SetFloat(XKey, horizontal);
-        animator.SetFloat(YKey, vertical);
+        animator.SetFloat(XKey, _input.x);
+        animator.SetFloat(YKey, _input.y);
         animator.SetTrigger(IsAttackKey);
         AudioController.Instance.PlaySoundAttack();
 
@@ -303,10 +311,9 @@ public class Player : MonoBehaviour
     private void CheckAttack(Transform attackPoint)
     {
         var collider = Physics2D.OverlapCircle(attackPoint.position, attackRadius, enemyLayerMask);
-        Debug.Log(collider == null);
+        
         if (collider != null && collider.GetComponent<Enemy>() != null)
         {
-            Debug.Log("Danh trung enemy");
             collider.GetComponent<Enemy>().OnHit();
         }
     }
@@ -314,11 +321,13 @@ public class Player : MonoBehaviour
     private void Shot()
     {
         if (canShot == false) return;
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        if (horizontal == 0 && vertical == 0) return;
-        if (horizontal != 0) vertical = 0;
-        _input = new Vector2(horizontal, vertical);
+        //float horizontal = Input.GetAxisRaw("Horizontal");
+        //float vertical = Input.GetAxisRaw("Vertical");
+        //if (horizontal != 0) vertical = 0;
+        //_input = new Vector2(horizontal, vertical);
+        checkCanAction();
+        if (_input.x == 0 && _input.y == 0) return;
+
         if (_input.y >= 1f)
         {
             ShotArrow(upAttackPoint);
@@ -345,9 +354,55 @@ public class Player : MonoBehaviour
         clone.Init(_input);
     }
 
+    private void checkCanAction()
+    {
+        
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        if (horizontal != 0) vertical = 0;
+        _input = new Vector2(horizontal, vertical);
+        if (_input.y >= 1f)
+        {
+            checkPoint(upAttackPoint);
+        }
+        else if (_input.y <= -1f)
+        {
+            checkPoint(downAttackPoint);
+
+        }
+        else if (_input.x >= 1f)
+        {
+            checkPoint(rightAttackPoint);
+
+        }
+        else if (_input.x <= -1f)
+        {
+            checkPoint(leftAttackPoint);
+
+        }
+    }
+
+    private void checkPoint(Transform Point)
+    {
+        var collider = Physics2D.OverlapCircle(Point.position, attackRadius);
+        if (collider == null) return;
+
+
+       
+
+        if (collider.gameObject.CompareTag("Peak")
+            ||collider.gameObject.CompareTag("Wall") 
+            ||collider.gameObject.CompareTag("Obstacle") )
+        {
+            
+            _input = Vector2.zero;
+        }
+    }
+    
+
     private void OnCompleteAttack()
     {
-        Debug.Log("Het tan cong");
+        
         isAttacking = false;
         _input = Vector2.zero;
     }

@@ -48,4 +48,7 @@ MonoBehaviour:
   door: {fileID: 0}
   victory: {fileID: 0}
   defeat: {fileID: 0}
+  textActionLimit: {fileID: 0}
+  player: {fileID: 0}
+  pauseMenu: {fileID: 0}
   IsDefeat: 0

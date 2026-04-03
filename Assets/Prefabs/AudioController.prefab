@@ -176,16 +176,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSourceBGM: {fileID: 9201730365104635845}
   audioSourceSFM: {fileID: 5176248020281168118}
-  soundMenu: {fileID: 8300000, guid: 16c3dbb5b48e21047b07d8ba3b8ec95d, type: 3}
-  soundGame: {fileID: 8300000, guid: 1a13840691ed5c84093847e68940fc53, type: 3}
+  soundMenu: {fileID: 8300000, guid: 3af1653d519550d43a3ada5754aed9e1, type: 3}
+  soundGame: {fileID: 8300000, guid: d099a470b1c2c3b4e98fab17398139d6, type: 3}
   soundHumanWalk: {fileID: 8300000, guid: f5cf500d9f675744095b2cf573b6f921, type: 3}
   soundPick: {fileID: 8300000, guid: 804d9be1fc7bacf49a64013eacf8efd2, type: 3}
   soundSelect: {fileID: 8300000, guid: 2d4b12437ac7a084ba7e04f0634a20b1, type: 3}
   soundAttack: {fileID: 8300000, guid: 6882a43a243e2b34b8cd61f777a5282f, type: 3}
   soundHitDame: {fileID: 8300000, guid: fec4448078fb49941bc39b59f7efc7a6, type: 3}
   soundDoor: {fileID: 8300000, guid: 3227f9400796efd41a500c98150ec4d3, type: 3}
-  soundWin: {fileID: 8300000, guid: c4ea29cd7c3b03647ace95224f21936d, type: 3}
   soundLose: {fileID: 8300000, guid: 5633958519ec6a4489a496a96eb26199, type: 3}
+  soundWin: {fileID: 8300000, guid: 15343ae955d2d564f9820bb0d6f800b6, type: 3}
+  soundClick: {fileID: 8300000, guid: 94ec0b6cb026c6249a111b86a620b2e7, type: 3}
 --- !u!1 &7540147450677188511
 GameObject:
   m_ObjectHideFlags: 0

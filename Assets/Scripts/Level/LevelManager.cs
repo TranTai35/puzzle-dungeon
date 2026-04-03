@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject victory;
     [SerializeField] private GameObject defeat;
     [SerializeField] private TMP_Text textActionLimit;
+    [SerializeField] private Player player;
+    [SerializeField] private GameObject pauseMenu;
 
     private int enemyKilled;
     private int actionUsed;
@@ -46,6 +50,11 @@ public class LevelManager : MonoBehaviour
     private void Update()
     {
         textActionLimit.text = $"Action: {actionUsed}/{levelData.actionLimit}";
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            player.SetCanPlay(false);
+            pauseMenu.SetActive(true);
+        }
     }
 
 
@@ -71,6 +80,11 @@ public class LevelManager : MonoBehaviour
 
     public void PlayVictory()
     {
+        if (!IsVictory)
+        {
+            AudioController.Instance.PlaySoundWin();
+        }
+
         IsVictory = true;
         victory.SetActive(IsVictory);
     }
@@ -86,4 +100,32 @@ public class LevelManager : MonoBehaviour
             defeat.SetActive(IsDefeat);
         }
     }
+
+    public void OnClickReload(int level)
+    {
+        AudioController.Instance.PlaySoundClick();
+        SceneManager.LoadScene($"Level{level}");
+    }
+
+    public void OnClickReturn()
+    {
+        AudioController.Instance.PlaySoundClick();
+        player.SetCanPlay(true);
+        pauseMenu.SetActive(false);
+
+    }
+
+    public void OnClickMenuLevel()
+    {
+        AudioController.Instance.PlaySoundClick();
+        SceneManager.LoadScene("MenuLevel");
+    }
+
+    public void OnClickNextLevel(int level)
+    {
+        AudioController.Instance.PlaySoundClick();
+        SceneManager.LoadScene($"Level{level}");
+    }
+
+
 }

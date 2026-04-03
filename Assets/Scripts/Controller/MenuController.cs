@@ -43,16 +43,22 @@ public class MenuController : MonoBehaviour
 
     public void OnClickPlayButton()
     {
+        AudioController.Instance.PlaySoundClick();
         SceneManager.LoadScene("Level1");
+        
     }
 
     public void OnClickSettingButton()
     {
+        AudioController.Instance.PlaySoundClick();
         menuSetting.SetActive(true);
+        
+
     }
 
     public void OnClickCloseSetting()
     {
+        AudioController.Instance.PlaySoundClick();
         menuSetting.SetActive(false);
     }
 

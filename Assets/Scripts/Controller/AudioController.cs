@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Serialization;
 using UnityEditor.TerrainTools;
 using UnityEngine;
@@ -20,8 +21,9 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip soundAttack;
     [SerializeField] private AudioClip soundHitDame;
     [SerializeField] private AudioClip soundDoor;
-    [SerializeField] private AudioClip soundWin;
     [SerializeField] private AudioClip soundLose;
+    [SerializeField] private AudioClip soundWin;
+    [SerializeField] private AudioClip soundClick;
 
 
     private const string SceneMenu = "Menu";
@@ -50,15 +52,25 @@ public class AudioController : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (string.Equals(scene.name, SceneMenu))
+        if(scene.name.Length >= 5)
         {
-            PlayBGM(soundMenu);
+            string level = scene.name.Substring(0, 5);
+            if (string.Equals(level, "Level"))
+            {
+                PlayBGM(soundGame);
+            }
         }
+        
+        if(scene.name.Length >= 4)
+        {
+            string menu = scene.name.Substring(0, 4);
+            if (string.Equals(menu, "Menu"))
+            {
+                PlayBGM(soundMenu);
+            }
+        }
+       
 
-        if (string.Equals(scene.name, "Level1"))
-        {
-            PlayBGM(soundGame);
-        }
     }
 
     private void PlayBGM(AudioClip audioClip)
@@ -115,11 +127,21 @@ public class AudioController : MonoBehaviour
     }
     public void PlaySoundWin()
     {
+
+        audioSourceBGM.Stop();
         audioSourceSFM.PlayOneShot(soundWin);
     }
 
     public void PlaySoundLose()
     {
+        audioSourceBGM.Stop();
         audioSourceSFM.PlayOneShot(soundLose);
     }
+
+    public void PlaySoundClick()
+    {
+        audioSourceSFM.PlayOneShot(soundClick);
+    }
+
+    
 }

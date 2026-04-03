@@ -24,13 +24,7 @@ public class Tutorial : MonoBehaviour
         Show(data);
     }
 
-
-    private void Update()
-    {
-        
-        
-    }
-
+  
 
 
     private Tween ShowSentence(TutorialSentence sentence)
