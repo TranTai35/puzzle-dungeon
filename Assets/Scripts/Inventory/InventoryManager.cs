@@ -46,10 +46,10 @@ public class InventoryManager : MonoBehaviour
         }
         
         var item = slotList[index].GetComponentInChildren<InventoryItem>();
-        Debug.Log(item != null);
+      
         if (item == null)
         {
-            Debug.Log("Khong the chon");
+          
             return;
         }
        

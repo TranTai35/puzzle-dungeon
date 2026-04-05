@@ -19,4 +19,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bae6468d91e9f6b4087c9a633f4e2835, type: 2}
   - {fileID: 11400000, guid: 7351c6e9e9db25547a54db5a1511126f, type: 2}
   - {fileID: 11400000, guid: b26e3eee592ac00419a76f04b86ccab7, type: 2}
+  - {fileID: 11400000, guid: 2594fe380802cd84ba0fca15f036ea88, type: 2}
   unlockedLevel: 7

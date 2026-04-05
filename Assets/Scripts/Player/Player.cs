@@ -173,8 +173,6 @@ public class Player : MonoBehaviour
         if (hit.collider == null) return;
         if (hit.collider.gameObject.CompareTag("Peak") && collision.gameObject.CompareTag("Peak"))
         {
-
-           
             AudioController.Instance.PlaySoundLose();
             GameController.Instance.IsDefeat = true;
             GameController.Instance.PlayDefeat();
@@ -248,7 +246,8 @@ public class Player : MonoBehaviour
             
         }
 
-        if (collision.gameObject.CompareTag("Chair"))
+        if (hit.collider == null) return;
+        if (collision.gameObject.CompareTag("Chair") && hit.collider.gameObject.CompareTag("Chair"))
         {
             targetItemPos = collision.transform.position;
             moveToItem = true;

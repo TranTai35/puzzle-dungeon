@@ -31,7 +31,7 @@ public class BigEnemy : MonoBehaviour
 
     private void OnHit()
     {
-        //Debug.LogError("Onhit");
+        
         if (animator != null)
         {
             animator?.SetTrigger(DieKey);
