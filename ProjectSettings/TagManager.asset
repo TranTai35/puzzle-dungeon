@@ -11,6 +11,7 @@ TagManager:
   - Peak
   - Projectile
   - Enemy
+  - Chair
   layers:
   - Default
   - TransparentFX

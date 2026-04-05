@@ -20,11 +20,11 @@ public class Projectile : MonoBehaviour
     public void Init(Vector2 input)
     {
         _input = input;
-        Debug.Log("Xoay");
-        Debug.Log(_input);
+       
+       
         if (_input.x >= 1f)
         {
-            Debug.Log("Xoay cung");
+            
             transforms.Rotate(0f, 0f, 90f);
         }else if (_input.x <= -1f)
         {
@@ -106,7 +106,7 @@ public class Projectile : MonoBehaviour
             currentEnemy = collision.transform.GetComponent<Enemy>();
             if (currentEnemy == null)
             {
-                Debug.LogError("1");
+                
 
                 return;
             }

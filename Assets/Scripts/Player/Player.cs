@@ -137,8 +137,7 @@ public class Player : MonoBehaviour
             //tạo 1 đường thẳng để kiểm tra có sẽ va chạm với gì không, (vị trí, hướng,độ dài)
             hit = Physics2D.Raycast(origin, _input,0);
 
-            Debug.Log(gameObject);
-            Debug.Log(gameObject,hit.collider);
+           
             //di chuyển nhưng vẫn kiểm tra va chạm
             rb.MovePosition(rb.position + 5 * Time.fixedDeltaTime * _input);
             animator.SetFloat(XKey, _input.x);
@@ -155,7 +154,8 @@ public class Player : MonoBehaviour
         
         if (hit.collider == null) return;
         if ((hit.collider.gameObject.CompareTag("Enemy") && collision.gameObject.CompareTag("Enemy")) ||
-            (hit.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")))
+            (hit.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")) ||
+            (hit.collider.gameObject.CompareTag("Obstacle") && collision.gameObject.CompareTag("Obstacle")))
         {
             if (isMoving)
             {
@@ -202,7 +202,6 @@ public class Player : MonoBehaviour
                 InventoryManager.Instance.AddItem(currentItem.Data);
                 Destroy(currentItem.gameObject);
                 currentItem = null;
-                moveToItem = false;
             }
             if (currentProjectile != null)
             {
@@ -212,7 +211,7 @@ public class Player : MonoBehaviour
                 moveToProjectile = false;
             }
 
-            
+            moveToItem = false;
             isMoving = false;
             _input = Vector2.zero;
             animator.SetFloat(XKey, _input.x);
@@ -231,7 +230,6 @@ public class Player : MonoBehaviour
 
             currentItem = item;
             targetItemPos = collision.transform.position;
-
             moveToItem = true;
             return;
 
@@ -249,8 +247,17 @@ public class Player : MonoBehaviour
             
             
         }
-        
-       
+
+        if (collision.gameObject.CompareTag("Chair"))
+        {
+            targetItemPos = collision.transform.position;
+            moveToItem = true;
+            return;
+
+
+        }
+
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
