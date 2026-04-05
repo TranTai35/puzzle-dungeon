@@ -32,9 +32,10 @@ public class AudioController : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null || Instance != this)
+        if (Instance != null && Instance != this)
         {
-            Destroy(Instance);
+            Destroy(gameObject);
+            return;
         }
 
         Instance = this;
@@ -87,17 +88,7 @@ public class AudioController : MonoBehaviour
 
     public void PlayHumanWalk()
     {
-        //if (audioSourceSFM.clip != soundHumanWalk)
-        //{
-        //    audioSourceSFM.clip = soundHumanWalk;
-        //}
-
-        //if (!audioSourceSFM.isPlaying)
-        //{
-        //    audioSourceSFM.Play();
-        //}
-
-
+    
         audioSourceSFM.PlayOneShot(soundHumanWalk);
     }
 
@@ -127,14 +118,13 @@ public class AudioController : MonoBehaviour
     }
     public void PlaySoundWin()
     {
-
-        audioSourceBGM.Stop();
+        //audioSourceBGM.Stop();
         audioSourceSFM.PlayOneShot(soundWin);
     }
 
     public void PlaySoundLose()
     {
-        audioSourceBGM.Stop();
+        //audioSourceBGM.Stop();
         audioSourceSFM.PlayOneShot(soundLose);
     }
 

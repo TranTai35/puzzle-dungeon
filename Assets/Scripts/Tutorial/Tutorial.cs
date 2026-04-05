@@ -35,7 +35,7 @@ public class Tutorial : MonoBehaviour
             () => string.Empty, // Gia tri khoi dau
             x => contentText.text = x, // Gia tri trong thoi gian Tween
             _content, // Gia tri cuoi cung
-            4f); // Thoi gian thuc hien Tween
+            3f); // Thoi gian thuc hien Tween
 
         return _showDialogueTween;
            

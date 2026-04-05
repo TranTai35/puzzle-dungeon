@@ -37,7 +37,7 @@ public class Door : MonoBehaviour
 
         transform.position = originalPos;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
 
         Destroy(gameObject);
     }

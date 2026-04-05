@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     }
     private void OnCompleteAnimationDie()
     {
-        LevelManager.Instance.EnemyKilled();
+        GameController.Instance.EnemyKilled();
         Destroy(gameObject);
     }
 

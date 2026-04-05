@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292fb8b58dc757a47bdd0b13e9b4ad9f, type: 3}
   m_Name: Level2
   m_EditorClassIdentifier: 
+  levelIndex: 2
+  sceneName: Level2
   enemyCount: 3
   actionLimit: 13

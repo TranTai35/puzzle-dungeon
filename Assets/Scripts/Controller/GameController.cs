@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LevelManager : MonoBehaviour
+public class GameController : MonoBehaviour
 {
-    public static LevelManager Instance;
+    public static GameController Instance;
 
     [SerializeField] private LevelData levelData;
     [SerializeField] private Door door;
@@ -23,16 +23,24 @@ public class LevelManager : MonoBehaviour
     private bool IsVictory;
     public bool IsDefeat;
 
+    int curLevel;
+    int unlocked;
+    private string unLockedLevel = "UnlockedLevel";
+
     private void Awake()
     {
 
-        if (Instance == null || Instance != this)
+        if (Instance != null && Instance != this)
         {
-            Destroy(Instance);
+            Destroy(gameObject);
+            return;
         }
 
         Instance = this;
 
+        curLevel = levelData.levelIndex;
+
+        unlocked = PlayerPrefs.GetInt(unLockedLevel, 1);
 
         enemyKilled = 0;
         actionUsed = 0;
@@ -87,6 +95,10 @@ public class LevelManager : MonoBehaviour
 
         IsVictory = true;
         victory.SetActive(IsVictory);
+        if (curLevel >= unlocked)
+        {
+            PlayerPrefs.SetInt(unLockedLevel, curLevel + 1);
+        }
     }
 
     public void PlayDefeat()
@@ -101,10 +113,10 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void OnClickReload(int level)
+    public void OnClickReload()
     {
         AudioController.Instance.PlaySoundClick();
-        SceneManager.LoadScene($"Level{level}");
+        SceneManager.LoadScene($"Level{curLevel}");
     }
 
     public void OnClickReturn()
@@ -121,10 +133,11 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene("MenuLevel");
     }
 
-    public void OnClickNextLevel(int level)
+    public void OnClickNextLevel()
     {
+        
         AudioController.Instance.PlaySoundClick();
-        SceneManager.LoadScene($"Level{level}");
+        SceneManager.LoadScene($"Level{curLevel + 1}");
     }
 
 

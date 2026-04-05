@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class Player : MonoBehaviour
 {
@@ -122,7 +123,7 @@ public class Player : MonoBehaviour
             isMoving = _input.x != 0 || _input.y != 0;
             if (_input != Vector2.zero)
             {
-                LevelManager.Instance.UseAction();
+                GameController.Instance.UseAction();
             }
             
 
@@ -175,8 +176,8 @@ public class Player : MonoBehaviour
 
            
             AudioController.Instance.PlaySoundLose();
-            LevelManager.Instance.IsDefeat = true;
-            LevelManager.Instance.PlayDefeat();
+            GameController.Instance.IsDefeat = true;
+            GameController.Instance.PlayDefeat();
             animator.SetTrigger(IsDieKey);
 
         }
@@ -189,13 +190,13 @@ public class Player : MonoBehaviour
 
     private void MoveToItem()
     {
-       
-        AudioController.Instance.PlayHumanPick();
+      
         rb.MovePosition(Vector2.MoveTowards( rb.position,  targetItemPos,5 * Time.fixedDeltaTime));
         
-        if (Vector2.Distance(rb.position, targetItemPos) < 0.2f)
+        if (Vector2.Distance(rb.position, targetItemPos) < 0.15f)
         {
-           
+            
+            
             if (currentItem != null)
             {
                 InventoryManager.Instance.AddItem(currentItem.Data);
@@ -243,7 +244,7 @@ public class Player : MonoBehaviour
             animator.SetFloat(XKey, _input.x);
             animator.SetFloat(YKey, _input.y);
             animator.SetBool(IsMovingKey, isMoving);
-            LevelManager.Instance.PlayVictory();
+            GameController.Instance.PlayVictory();
             canPlay = false;
             
             
@@ -256,9 +257,6 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Projectile"))
         {
-
-
-
             currentProjectile = collision.GetComponent<Projectile>();
             targetItemPos = collision.transform.position;
             if (isMoving)
@@ -282,7 +280,7 @@ public class Player : MonoBehaviour
         if (_input.x == 0 && _input.y == 0) return;
 
         isAttacking = true;
-        LevelManager.Instance.UseAction();
+        GameController.Instance.UseAction();
 
         animator.SetFloat(XKey, _input.x);
         animator.SetFloat(YKey, _input.y);
@@ -344,7 +342,7 @@ public class Player : MonoBehaviour
         {
             ShotArrow(leftAttackPoint);
         }
-        LevelManager.Instance.UseAction();
+        GameController.Instance.UseAction();
         canShot = false;
     }
 
@@ -414,8 +412,8 @@ public class Player : MonoBehaviour
 
     private void checkDefeat()
     {
-        LevelManager.Instance.PlayDefeat();
-        if (LevelManager.Instance.IsDefeat == true)
+        GameController.Instance.PlayDefeat();
+        if (GameController.Instance.IsDefeat == true)
         {
             AudioController.Instance.PlaySoundLose();
             isMoving = false;

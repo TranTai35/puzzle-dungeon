@@ -64,8 +64,10 @@ public class Projectile : MonoBehaviour
       
         rb.MovePosition(Vector2.MoveTowards(rb.position, target.position, 5 * Time.fixedDeltaTime));
 
+
         if (Vector2.Distance(rb.position, target.position) < 0.1f)
         {
+            rb.position = target.position;
         
         
             if (currentEnemy != null)
@@ -81,7 +83,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //Debug.LogError($"Trigger: {collision?.gameObject.name}");
+
 
         if (hitArrow.collider == null) return;
         if ((hitArrow.collider.gameObject.CompareTag("Peak") && collision.gameObject.CompareTag("Peak")) ||
@@ -91,59 +93,11 @@ public class Projectile : MonoBehaviour
             _input = Vector2.zero;
             rb.isKinematic = true;
 
-            //if (target == null)
-            //{
-            //    target = collision.transform;
-            //}
+          
         }
 
-        //if (collision.gameObject.CompareTag("Enemy"))
-        //{
-        //    currentEnemy = collision.transform.GetComponent<Enemy>();
-        //    if (currentEnemy == null)
-        //    {
-        //        Debug.LogError("1");
-
-        //        return;
-        //    }
-
-        //    if (target == null)
-        //    {
-        //        target = collision.transform;
-        //    }
-        //    moveToEnemy = true;
-        //}
+       
     }
-
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    Debug.LogError($"Trigger: {collision?.gameObject.name}");
-
-    //    if (hitArrow.collider == null) return;
-    //    if (hitArrow.collider.gameObject.CompareTag("Peak") && collision.gameObject.CompareTag("Peak"))
-    //    {
-    //        _input = Vector2.zero;
-    //        rb.isKinematic = true;
-    //        target = collision.transform.position;
-    //        colliders.isTrigger = true;
-    //    }
-
-    //    if (collision.gameObject.CompareTag("Enemy"))
-    //    {
-    //        currentEnemy = collision.transform.GetComponent<Enemy>();
-    //        if (currentEnemy == null)
-    //        {
-    //            Debug.LogError("1");
-
-    //            return;
-    //        }
-    //        target = collision.transform.position;
-    //        moveToEnemy = true;
-    //    }
-
-    //    //colliders.isTrigger = true;
-
-    //}
 
     private void OnTriggerStay2D(Collider2D collision)
     {
