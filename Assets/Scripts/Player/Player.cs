@@ -188,7 +188,7 @@ public class Player : MonoBehaviour
 
     private void MoveToItem()
     {
-      
+        if (isMoving == false) return;
         rb.MovePosition(Vector2.MoveTowards( rb.position,  targetItemPos,5 * Time.fixedDeltaTime));
         
         if (Vector2.Distance(rb.position, targetItemPos) < 0.15f)
@@ -224,8 +224,6 @@ public class Player : MonoBehaviour
         var item = collision.GetComponent<ItemSkill>();
         if (item != null)
         {
-            
-
             currentItem = item;
             targetItemPos = collision.transform.position;
             moveToItem = true;
@@ -391,8 +389,6 @@ public class Player : MonoBehaviour
         var collider = Physics2D.OverlapCircle(Point.position, attackRadius);
         if (collider == null) return;
 
-
-       
 
         if (collider.gameObject.CompareTag("Peak")
             ||collider.gameObject.CompareTag("Wall") 

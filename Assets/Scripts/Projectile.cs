@@ -89,7 +89,8 @@ public class Projectile : MonoBehaviour
         if ((hitArrow.collider.gameObject.CompareTag("Peak") && collision.gameObject.CompareTag("Peak")) ||
             (hitArrow.collider.gameObject.CompareTag("Wall") && collision.gameObject.CompareTag("Wall")) ||
             (hitArrow.collider.gameObject.CompareTag("Obstacle") && collision.gameObject.CompareTag("Obstacle"))||
-            (hitArrow.collider.gameObject.CompareTag("Chair") && collision.gameObject.CompareTag("Chair"))) 
+            (hitArrow.collider.gameObject.CompareTag("Chair") && collision.gameObject.CompareTag("Chair")) ||
+            (hitArrow.collider.gameObject.CompareTag("ItemSkill") && collision.gameObject.CompareTag("ItemSkill"))) 
         {
             _input = Vector2.zero;
             rb.isKinematic = true;
